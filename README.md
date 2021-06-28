@@ -10,7 +10,7 @@ The goal of this project is for me to understand the different layers of a web s
 - Stored resources within a SQL database
 - Deployed the application to Heroku + explored application deployment to AWS
 - Set up Cloudflare
-Advanced Features
+### Advanced Features
 - Implemented advanced functionality in the API such as image upload, payments, and user confirmation emails
 - Utilized Marshmallow for Serialization
 - Deployed documentation pages and tested my API witth Postman's collection runner
