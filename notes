@@ -1,0 +1,95 @@
+notes:
+
+1. a request is what your browser does. A request requests the server which sends a response
+2. from flask import Flask --> packages are lowercase, classes start with uppercase
+
+what is a web server?
+	- a piece of software designed to accept incoming web requests
+	- for example, Google has many web servers
+	- When we go to http://google.com, we send something to the webserver to tell it what we want
+		-> we send to the server: <VERB> <PATH> <PROTOCOL>  ex. GET / HTTP/1.1 
+
+Browser to Server:
+	- when user sends data to the server, they send a POST request
+	- when user wants to receive data back from the server, they send a GET request
+
+Server:
+	- when we receive a POST request, we have to deal with it
+	- when we receive a GET request, we have to send data back
+
+
+- browsers by default do a GET request
+@app.route('/') by default is a GET request to the home page (root)
+
+- PUT is idempotent, only the first request would make a difference, and requests thereafter won't do anything (and not fail)
+
+@app.route('/store/<string:name>') -> <string:name> is flask syntax to place the name, which is a parameter in the decorator's corresponding function, at the end of the endpoint.
+
+JSON is essentially a dictionary (a set of key/value pairs) that send information from one application to another; however,
+its TYPE is not a dictionary, it is a string which appears to be a dictionary. We can't send objects over the web, but we can 
+send strings. So we must convert from the string representation of a dictionary to the dictionary object. 
+
+jsonify belongs in the flask package, which allows us to convert an object into JSON (string) format. NOTE: JSON has to be
+a dictionary format to jsonify it.
+
+NOTE: JSON always uses DOUBLE QUOTES and never single quotes and always has to start with a dictionary (i.e. you cannot jsonify just a list for example)
+
+pip3 freeze # gives the libraries and version installed
+
+
+- by updating our libraries, we may break old implementations we did in the past. We need to make sure our project doesn't share any libaries that are shared, because if we update them, it'll cause things to break. We can solve this by creating a virtualenv so that
+we can create an virtual environment that creates a fresh environment where we can install python / libaries with specific versions
+that we desire.
+
+pip3 install virtualenv
+virtualenv <new environment name> --python=<python version>
+
+virtualenv venv_flaskapp --python=python3 # this creates a folder called venv_flaskapp and puts a fresh python3 installation in it
+
+source venv_flaskapp/bin/activate # to activate the virtual environment
+
+deactivate # deactivate virtual environment
+
+from flask import Request # allows us to access the json body from the request
+
+
+flask_restful import Resource, Api
+	- resource are usually mapped into database table
+	- if our Api is concerned with item, piano, etc. then it might be considered with that resource (item, piano, etc). A resource is a thing.
+
+	- the Api works with resources and every resource must be a class that inherits from Resource
+
+Test-first API design
+	- a lot of people start making endpoints without realizing whether they are necessary or not
+	- instead, we first create a folder and put the requests our API needs, this forces you to identify what need there are for these requests
+
+HTTP status code:
+
+404 - error not found
+201 - created (usually for POST)
+202 - accepted (when you are delaying the creation - for ex. if creating the object takes a long time, i'm returning 202 and the object may create X time later, and may possibly fail)
+200 - okay (usually for GET)
+400 - bad request : client sends something, say though POST request, which already exists and must be unique
+401 - permission not granted, authorization required
+
+
+### AUTHENTICATION ###
+
+pip install Flask-JWT
+
+JWT = JSON Web Token -> an obfuscation of data. We encode data that's a JSON web token that nobody can understand it unless they have a decryption key
+
+A user will have a unique identifiable number (id). A user is going to send us a username and a password and we're going to send them (the client) a JWT, and that JWT is going to be the user ID. When the client has the JWT, they can send it to us with any request they make, and when they do that, it's going to tell us that they have previously authenticated
+
+1. encrypt by defining a app.secret_key = 'XXX' # do not leak the secret key by accident
+2. create a security.py file which will contain a few important functions
+3. we have to be careful of comparing strings, especially on different systems / servers and python versions, so we can use a safer
+   method to compare strings: from werkzeug.security import safe_str_cmp  --> safe_str_cmp(str1, str2) instead of str1 == str2 
+
+### reqparse ###
+1. we can use reqparse to parse through the arguments in the request
+	- we can define what key we should see in the JSON payload, this way, the client can't send us additional info that we don't need.
+	- we can specify: type, required, help
+
+error first approach - handle error cases first using if statements, then proceed and do the other processing if we pass the error check.
+
