@@ -1,5 +1,5 @@
 # REST-API-Design
-A self-learning project where I explore professional-grade REST APIs and the design process behind them through the guidance of an expert. 
+A self-learning project where I explore professional-grade REST APIs and the design process behind them.
 The goal of this project is for me to understand the different layers of a web server and how web applications interact with each other.
 
 ### My Process
